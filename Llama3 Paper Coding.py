@@ -13,14 +13,21 @@ client = OpenAI(base_url="http://localhost:1234/v1", api_key="lm-studio")
 # Load the PDF file
 pdf_file_path = "./Papers/Test_page_5.pdf"
 
-prompt = """
-Is there any sentence related to hardware? If yes, please list all the sentences. Just list the original sentence, do not summarize the sentence yourself. 
-Here is an exammple: 
+prompt_v1 = """
+Is there any sentence related to hardware? If yes, please list all the sentences directly without any additional comments or summaries.
+Here are some examples:
 * Virtual Reality (VR) and Augmented Reality (AR) Head Mounted Displays (HMDs) have the potential to significantly expand the display space, enabling immersive entertainment and workspaces that go beyond the physical limitations of the car interior.
 * Problematically, VR HMDs also occlude visual perception of reality [44, 6] and thus the car’s motion, and are likely to lead to sensory mismatch and, consequently, motion sickness.
 * However, assuming the orientation and velocity of the vehicle can be tracked at low latency, HMDs have the potential to portray the vehicle motion virtually.
-Just print out the original sentence directlyl, do not reply anthying else.
+Please only output sentences directly related to hardware. Do not include any additional comments or summaries. If the sentence is not related to hardware, do not output anything.
 """
+
+prompt_v2 = """
+Is there any sentence related to hardware? If yes, please list all the sentences directly without any additional comments or summaries.
+Just print out the original sentence directly, do not reply anything else.
+"""
+
+prompt = prompt_v2
 
 # Read the PDF file and parse the text
 def extract_text_from_pdf(pdf_file_path):

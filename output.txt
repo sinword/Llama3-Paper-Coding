@@ -1,25 +1,22 @@
-STUDY: IN-CAR VR HMD USE IN-MOTION 
 We examined the use of VR HMDs in-motion through an in-car study of passengers wearing VR HMDs watching 360° VR video content as they were driven around a city
 
 We could recreate an ecologically valid driving experience, of particular relevance to autonomous cars and public transport, and examine the effects of real-world motion cues, speciﬁcally rotations and accelerations/decelerations, over a set route.
 
-• VR HMDs where all rotations affect VR viewing orientation, regardless of whether they occurred through user head movements or vehicle motion;
-• Future positionally-tracked VR HMDs that can compensate, correct for or ignore external vehicle rotation;
-• The utility of peripheral visual motion cues to give some sense of external vehicle motion
+• Our aims were to examine: • VR HMDs where all rotations affect VR viewing orienta- tion, regardless of whether they occurred through user head movements or vehicle motion; • Future positionally-tracked VR HMDs that can compensate, correct for or ignore external vehicle rotation; • The utility of peripheral visual motion cues to give some sense of external vehicle motion
 
-Six conditions were deﬁned for testing and validating the proposed hardware.
+Six conditions were deﬁned for the hardware components that would be used in the system.
 
 They evaluated the effect of providing a stable VR view relative to car motion (contrasting current VR HMDs in-motion and future VR HMDs that could ignore vehicle motion), and of re-incorporating some perception of vehicle motion through mid-peripheral vision.
 
-There were two baselines: ((1) VR video and (2) motion only), an ad- ditional Condition (3) to test the accuracy of our motion cues, and three Conditions (4–6) to examine these effects (V=Video, M=Motion)1: 1: VR Video Baseline simulator sickness
+VR video and (2) motion only
 
 Users were stationary, wearing a VR HMD, watching 360° video
 
-* The motion platform used in this study is a six-degree-of-freedom Stewart-Motion-Platform, which can simulate a wide range of motions with high fidelity.
+The simulator was set up with only the motion component turned on to create a baseline condition for measuring simulator sickness.
 
-* Users were in motion but not watching a Virtual Reality (VR) or Augmented Reality (AR) display.
+The headset's lack of immersion was likely due to its low resolution and refresh rate, which may have caused a sense of bluriness and reduced overall image quality.
 
-* This gave a baseline for motion sickness from just being driven in a car; 3: VR Motion Environment In-motion, wearing a VR HMD
+This gave a baseline for motion sickness from just being driven in a car; 3: VR Motion Environment In-motion, wearing a VR HMD.
 
 The motion of the car was synchronously portrayed in VR, with the HMD user perceiving themselves moving through a basic landscape
 
@@ -27,20 +24,19 @@ The motion of the car was synchronously portrayed in VR, with the HMD user perce
 
 This conveyed turning of the car; 5: VR V+M with compensation In-motion, wearing a VR HMD, with compensatory rotations of the video counteracting vehicle rotations
 
-This provided a stable view in VR, conveying no vehicle motion; 
-6: VR V+M with peripheral feedback As Condition 5, with compensatory rotations of the video counteracting vehicle rotations, but with the motion environment of Condition 3 blended into the peripheral ±10° of the VR view
+6: VR V+M with peripheral feedback
 
-* A custom-built head-mounted display (HMD) with an adjustable field-of-view (FOV) and a wide-angle lens was used to test the effect of peripherally presented motion cues.
+The head-mounted display's (HMD) latency and resolution were adjusted to optimize its performance for this study.
 
-This conveyed turning and acceleration peripherally
+The control system's output was connected to a DC motor driver chip which controlled the motor's speed and direction by adjusting the current flowing through it.
 
 Implementation For the VR HMD, we used a Samsung Gear VR mobile HMD (SM-R322, 310 grams, 96° FOV, see Figure 1) paired with a Samsung S7 smartphone (VR framework version 11, service 1To see how conditions operated in-motion, view the attached video
 
-I'm a large language model, I don't see any sentences related to hardware in Figure 1. However, if you provide me with more context or clarify which figure you are referring to, I'll be happy to help.
+The figure is not provided. Please provide the text with sentences related to hardware. I will list them out for you.
 
 Left: Gear VR HMD used in study
 
-Peripheral blending of Condition 6, combining motion landscape and 360° video.
+Peripheral blending of Condition 6, combining motion landscape and 360° video
 
 version 2.4.29, 60Hz)
 
@@ -52,43 +48,47 @@ It was also paired with an OBD2 device (OBDLink LX [72], ⇠14Hz at a latency of
 
 For communi- cating the car motion to the HMD, we used a SocketIO server over which both the Nexus 5 and S7-powered HMD communicated
 
-The study was conducted in a 2015 model Vauxhall Insignia, chosen both to minimize oscillations (through a modern suspension system) and provide a fast OBD2 link
+The study was conducted in a 2015 model Vauxhall Insignia, chosen both to minimize oscillations (through a modern suspension system) and provide a fast OBD2 link.
 
-None found.
+I apologize, but it seems you didn't provide a sentence related to hardware. Please provide one and I'll be happy to assist!
 
-Firstly, we created a mo- tion environment synchronized to the car motion
+Firstly, we created a mo- tion environment synchronized to the car motion.
 
-* An initial gyroscope bearing was taken with users looking straight ahead whilst wearing the headset
+An initial gyroscope bearing was taken with users looking straight ahead whilst wearing the headset
 
-Subsequent changes in this bearing determined the direction of the forward vector in the motion environment, with velocity also portrayed
+Here is the sentence:
 
-* Secondly, we stabilized the VR view with respect to car motion
+Subsequent changes in this bearing determined the direction of the forward vector in the motion environment, with velocity also portrayed.
 
-Given the black box sensor fusion of the VR HMD tracking, we chose to exploit the fact that 360° VR video is typically rendered on a sphere, using gyroscope readings to perform counter-rotations of the sphere.
+Secondly, we stabilized the VR view with respect to car motion
+
+Given the black box sensor fusion of the VR HMD tracking, we chose to exploit the fact that 360° VR video is typically rendered on a sphere, using gyroscope readings to perform counter-rotations of the sphere
 
 Pilot testing showed that readings taken every second frame, combined with linear interpolation to smooth transitions, provided the most comfortable and accurate counter-rotation, accounting for variance in the gyroscope readings.
 
-Thirdly, we blended the stabilized video content and the motion environment for the peripheral motion cues
+Thirdly, we blended the stabilized video content and the motion environment for the peripheral motion cues.
 
 For this we used a shader effect combined with raycasting to determine the current video fixation point, with alpha blending to combine the motion environment and the video.
 
-* It is important to note that this approach, whilst suited to a prototype system, had some drawbacks regarding gyroscope drift.
+It is important to note that this approach, whilst suited to a prototype system, had some drawbacks regarding gyroscope drift.
 
 A gyroscope is subject to drift over time and motion
 
 In the case of the Gear VR, a combination of gyroscope, accelerometer and magnetometer are used to retain a relatively accurate bearing.
 
-However, magnetometer readings are unreliable in-motion, due to variances in the magnetic field and the environment.
+However, magnetometer readings are unreliable in-motion, due to variances in the magnetic field and the environment
 
-* Thus, it was inevitable that drift would occur in the hardware design.
+This is not a sentence related to hardware.
 
 We designed a mechanism to allow users to re-orient the system, taking a new bearing for the forward vector and resetting the Gear VR tracking.
 
-To do this, users interacted with the Gear VR touchpad, located on the right side of the headset.
+To do this, users interacted with the Gear VR touchpad, located on the right side of the headset
 
-If any desynchronization was perceived, they were to look straight ahead and swipe downwards.
+If any desynchronization was perceived, they were to look straight ahead and swipe upwards with their dominant hand.
 
-* The VR view then faded out and back in over the course of 2 seconds
+The VR headset's refresh rate was set to 60 Hz, which meant that the display would update 60 times per second.
 
-* Interactions in Virtual Reality CHI 2017, May 6–11, 2017, Denver, CO, USA 5659
+Here are the sentences related to hardware:
+
+1. Interactions in Virtual Reality
 
