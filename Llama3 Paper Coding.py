@@ -3,7 +3,6 @@ from openai import OpenAI
 import fitz
 import logging
 import time
-import re
 
 logging.basicConfig(filename='logfile.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -11,7 +10,7 @@ logging.basicConfig(filename='logfile.log', level=logging.INFO, format='%(asctim
 client = OpenAI(base_url="http://localhost:1234/v1", api_key="lm-studio")
 
 # Load the PDF file
-pdf_file_path = "./Papers/Test_page_5.pdf"
+pdf_file_path = "./Papers/I Am The Passenger - How Visual Motion Cues Can Influence Sickness For In-Car VR.pdf"
 
 prompt_v1 = """
 Is there any sentence related to hardware? If yes, please list all the sentences directly without any additional comments or summaries.
@@ -28,7 +27,31 @@ Just print out the original sentence directly, do not reply anything else.
 Don't add any additional comments or summaries.
 """
 
-prompt = prompt_v2
+prompt_v3 = """
+Is there any sentence related to hardware? If yes, please list all such sentences directly without any additional comments or summaries.
+Print out each original sentence directly.
+"""
+
+prompt_v4 = """
+Please determine whether the following sentences are related to hardware. 
+If they are, respond with "Yes"; if not, respond with "No".
+"""
+
+prompt_v5 = """
+Please determine whether the following sentences are related to hardware and only hardware.
+If they are, respond with "Yes"; if not, respond with "No".
+Keep in mind that sentences related to hardware may contain information about devices or technical terms.
+"""
+
+Prepromt = """
+Provide sentences related to hardware to assist the model in understanding the task. Here are some examples:
+
+1. If your input includes any information related to hardware or devices, please list them.
+2. Please ensure that the sentences provided are directly related to hardware, but there is no need to express this association in the output.
+3. The current task is to enable the model to determine whether the sentence is related to hardware. If it is, please respond with "Yes"; if not, respond with "No".
+"""
+
+prompt = prompt_v5
 
 # Read the PDF file and parse the text
 def extract_text_from_pdf(pdf_file_path):
@@ -44,11 +67,6 @@ def extract_text_from_pdf(pdf_file_path):
         logging.error(f"Error while extracting text from PDF: {e}")
         return None
 
-# Split content into sentences
-def split_into_sentences(text):
-    sentences = re.split(r"(?<!\d)\.\s|\.\s(?!\d)", text)
-    return sentences
-
 def apply_model_to_sentence(sentence):
     try:
         completion = client.chat.completions.create(
@@ -59,31 +77,31 @@ def apply_model_to_sentence(sentence):
             ],
             temperature=0.7,
         )
-        return completion.choices[0].message.content
+        return completion.choices[0].message.content.strip()
     except Exception as e:
         logging.error(f"Error while applying model to sentence: {e}")
         return None
 
 def main():
-    start_time = time.time()  # Start timing
-    
-    text = extract_text_from_pdf(pdf_file_path)
+    start_time = time.time()
 
+    text = extract_text_from_pdf(pdf_file_path)
     if text is None:
         return
     
-    sentences = split_into_sentences(text)
+    sentences = text.split(". ")
 
-    with open("output.txt", "w", encoding="utf-8") as f:
+    with open("output.txt", "w", encoding = "utf-8") as f:
         for sentence in sentences:
-            processed_sentence = apply_model_to_sentence(sentence)
-            if processed_sentence and processed_sentence.strip().lower() != "no":
-                f.write(processed_sentence + "\n\n")
-                print(processed_sentence)
-    
-    end_time = time.time()  # End timing
+            response = apply_model_to_sentence(sentence)
+            if response is not None and response.strip() == "Yes":
+                sentence = sentence.replace("- ", "")
+                f.write(sentence.strip() + ".\n\n")
+                print(sentence.strip() + ".")
+
+    end_time = time.time()
     elapsed_time = end_time - start_time
-    print(f"Total time taken: {elapsed_time:.2f} seconds")
+    print(f"Total time taken: {elapsed_time: .2f} seconds")
 
 if __name__ == "__main__":
     main()
