@@ -90,3 +90,199 @@ We could recreate an ecologically valid driving experience, of particular releva
 
 Our aims were to examine: • VR HMDs where all rotations affect VR viewing orientation, regardless of whether they occurred through user head movements or vehicle motion; • Future positionally-tracked VR HMDs that can compensate, correct for or ignore external vehicle rotation; • The utility of peripheral visual motion cues to give some sense of external vehicle motion.
 
+Users were stationary, wearing a VR HMD, watching 360° video.
+
+This was to get a baseline for standard simulator sickness; 2: Motion Only Baseline motion sickness.
+
+This gave a baseline for motion sickness from just being driven in a car; 3: VR Motion Environment In-motion, wearing a VR HMD.
+
+The motion of the car was synchronously portrayed in VR, with the HMD user perceiving themselves moving through a basic landscape.
+
+This was to evaluate whether our sensing of motion matched what was physically perceived; 4: VR V+M In-motion, wearing a VR HMD, with all rotations (head movements and vehicle rotations) interpreted as head movements.
+
+This conveyed turning of the car; 5: VR V+M with compensation In-motion, wearing a VR HMD, with compensatory rotations of the video counteracting vehicle rotations.
+
+Implementation For the VR HMD, we used a Samsung Gear VR mobile HMD (SM-R322, 310 grams, 96° FOV, see Figure 1) paired with a Samsung S7 smartphone (VR framework version 11, service 1To see how conditions operated in-motion, view the attached video.
+
+Left: Gear VR HMD used in study.
+
+version 2.4.29, 60Hz).
+
+To have the capability to both convey the motions of the car in VR, and counteract the rotations of the car, a Nexus 5 smartphone was used.
+
+It was mounted to the car, with its gyroscope (sampled at 30Hz at a latency of ∼40ms) providing bearing changes.
+
+It was also paired with an OBD2 device (OBDLink LX [72], ∼14Hz at a latency of 100ms) for capturing car velocity in real-time.
+
+For communicating the car motion to the HMD, we used a SocketIO server over which both the Nexus 5 and S7-powered HMD communicated.
+
+The study was conducted in a 2015 model Vauxhall Insignia, chosen both to minimize oscillations (through a modern suspension system) and provide a fast OBD2 link.
+
+Firstly, we created a motion environment synchronized to the car motion.
+
+An initial gyroscope bearing was taken with users looking straight ahead whilst wearing the headset.
+
+Secondly, we stabilized the VR view with respect to car motion.
+
+Given the black box sensor fusion of the VR HMD tracking, we chose to exploit the fact that 360° VR video is typically rendered on a sphere, using gyroscope readings to perform counterrotations of the sphere.
+
+Pilot testing showed that readings taken every second frame, combined with linear interpolation to smooth transitions, provided the most comfortable and accurate counter-rotation, accounting for variance in the gyroscope readings.
+
+For this we used a shader effect combined with raycasting to determine the current video ﬁxation point, with alpha blending to combine the motion environment and the video.
+
+It is important to note that this approach, whilst suited to a prototype system, had some drawbacks regarding gyroscope drift.
+
+A gyroscope is subject to drift over time and motion.
+
+In the case of the Gear VR, a combination of gyroscope, accelerometer and magnetometer are used to retain a relatively accurate bearing.
+
+However, magnetometer readings are unreliable in-motion, due to variances in the magnetic ﬁeld and the environment.
+
+We designed a mechanism to allow users to re-orient the system, taking a new bearing for the forward vector and resetting the Gear VR tracking.
+
+To do this, users interacted with the Gear VR touchpad, located on the right side of the headset.
+
+This level was chosen as we did not have an understanding of the magnitude of the sickness effects of VR HMD use in motion and thus could not ethically examine more susceptible participants at this point.
+
+Changes were indicated in real-time by participants using forward and backward swipes of the Gear VR touchpad, which would temporarily present the scale over the VR content.
+
+Finally, users were asked to rank the VR Video In-Motion conditions (4–6) in order of preference, before taking part in a short interview.
+
+However, these durations were problematic for our study given the unknown magnitude of sickness effects of VR HMD-use in motion.
+
+To provide consistent and ecologically valid motion stimuli, laps of a quiet, predominantly one-way road system with no trafﬁc lights were undertaken.
+
+0.86km test route velocity proﬁle, as captured throughout the study across participants using GPS and OBD2 velocity.
+
+Three VR video clips were used, chosen on the basis of containing no movement, portraying stationary events in 360° [51, 62, 79], and played in the same order for every condition.
+
+The generally low presence scores suggest this metric was confounded by the relatively low presence of the Gear VR HMD and the 360° video content.
+
+Interactions in Virtual Reality CHI 2017, May 6–11, 2017, Denver, CO, USA 5661 2: Motion Only 3: VR Motion Env.
+
+You can look around in the car with the headset on, but it takes quite a lot of effort to see what’s directly behind you.
+
+it was more immersive almost, but it just meant that especially if you were going faster or when there were bumps mid turns...
+
+We evaluated three VR in-motion conditions: (4) conveyed rotations only, (5) conveyed no motion and (6) peripherally conveyed rotations and accelerations.
+
+This suggests that, given a VR HMD that can counteract vehicle rotations, for these users VR in-motion is useable (albeit for the short duration examined).
+
+VR In-Motion Was Problematic For Many For the majority of participants, sickness exceeded what would be considered acceptable for a motion simulator [37].
+
+Our results demonstrate that there are signiﬁcant problems regarding VR HMD use in-motion that need to be overcome to make VR in-motion usable for the general population.
+
+The latency of the gyroscope and OBD2 link, the gyroscopic drift (∼20° per min), the necessity for user resets of the forward vector (∼once per lap, mean=4.9, SD=2.4) and the lack of conveyance of oscillations could all contribute to a, likely modest, increase in sickness.
+
+Consequently, we recommend that VR HMDs supporting positional tracking be used in-motion if possible.
+
+This would provide an accurate forward vector for car motion, as well as allow the conveyance of oscillations, a component of motion sickness we were unable to evaluate.
+
+GPS and gyroscope, periodic resets of orientation, marker tracking), some form of positional tracking appears preferable.
+
+Problematically, consumer HMDs with positional tracking currently fuse both optical tracking and IMU data, meaning there is a reliance on gyroscopes which would make their immediate deployment in-car difﬁcult.
+
+duration of stimulii; the effectiveness of interventions over time; characteristics of the route, vehicle and motion experienced; different forms of vection (see Section 2.2); differing motion and simulator sickness susceptibilities; the speciﬁcations of the HMD; age and user demographics; and the virtual content being experienced.
+
+However, this implementation was limited by the technology.
+
+The Gear VR HMD has a ﬁeld of view (FOV) of ∼96°; of this, our peripheral display took over ±10° from the edge.
+
+Consequently, any expansion in VR FOV (e.g.
+
+HMDs with high FOV lenses [82] or sparse peripheral displays [83]) would allow for further exploration of the effectiveness of conveying motion through the mid-to-far periphery of the eye.
+
+We used a basic VR landscape to portray motion to maintain 60Hz when rendered in conjunction with video content.
+
+Motion could be incorporated implicitly into VR (as with the Gear VR and Condition 4), by design (as part of a game), or generically for any content (e.g.
+
+Initial user calibration will also be required to determine susceptibility and choose the best method of VR presentation.
+
+Manipulating the VR view to induce anticipatory actions might also help prevent motion sickness.
+
+As an example, a VR display that tilted content so users had to match the tilt to continue reading might mimic these results.
+
+Such effects might make VR HMDs, and notably also AR HMDs, ideally suited to facilitating entertainment and work whilst preventing motion sickness in autonomous cars and other transportation, where the environment might lead to sensory conﬂict and consequently motion sickness [20].
+
+For example, Galvanic Vestibular Stimulation (GVS) [11] has the capability to alter our physical perception of motion and has been applied to the problem of vection [56], whilst other devices (e.g.
+
+These could be used to counteract physically perceived motion.
+
+For private spaces such as cars, provided there is sufﬁcient trust [65] in the vehicle, then VR HMD use is more straightforward.
+
+AR HMDs may be more acceptable here and research into solutions across mixed-reality HMDs should be investigated.
+
+One way to do this is with VR and AR HMDs.
+
+Our results suggest that there is, as-yet, no universal solution for minimizing sickness from VR HMD use in-motion, however we have begun to explore how different solutions can make VR HMDs usable in transit.
+
+An Introduction to Positional Tracking and Degrees of Freedom (DOF).
+
+http://www.roadtovr.com/introduction-positional-track ing-degrees-freedom-dof/ 3.
+
+Proceedings of the Institution of Mechanical Engineers, Part F: Journal of Rail and Rapid Transit 229, 4 (2015), 428–445.
+
+Oculo-Vestibular Recoupling Using Galvanic Vestibular Stimulation to Mitigate Simulator Sickness.
+
+Visually Induced Motion Sickness Estimation and Prediction in Virtual Reality using Frequency Components Analysis of Postural Sway Signal.
+
+Motion sickness on tilting trains.
+
+Autonomous vehicle entertainment system US9272708 B2.
+
+https://www.google.com/patents/US9272708 US Patent 9,272,708.
+
+In Adjunct Proceedings of the 7th International Conference on Automotive User Interfaces and Interactive Vehicular Applications (AutomotiveUI ’15).
+
+Combating VR sickness through subtle dynamic ﬁeld-of-view modiﬁcation.
+
+In 2016 IEEE Symposium on 3D User Interfaces (3DUI).
+
+Discovering Statistics Using R.
+
+http://www.ncbi.nlm.nih.gov/pubmed/15460624 30.
+
+Coriolis cross-coupling effects: disorienting and nauseogenic or not? Aviation, space, and environmental medicine 49, 1 Pt 1 (jan 1978), 29–35.
+
+Displays (2011).
+
+Ford patents windshield movie screen for driverless cars.
+
+A Dose of Reality: Overcoming Usability Challenges in VR Head-Mounted Displays.
+
+Making VR Work: Building a Real-world Immersive Modeling Application in the Virtual World.
+
+Samsung’s New Headphones Trick Your Inner Ear to Move You in VR.
+
+http://www.roadtovr.com/samsungs-new-headphones-trick -your-inner-ear-to-move-you-in-vr/ 57.
+
+See where Tesla makes its cars in 360 degrees.
+
+Qantas & Samung unveil industry-ﬁrst virtual reality experience for travellers.
+
+http://www.qantasnewsroom.com.au/media-releas es/qantas-samsung-unveil-industry-first-virtual-real ity-experience-for-travellers/ 65.
+
+Motion sickness in self-driving vehicles.
+
+OBD Solutions.
+
+OBDLink® LX Bluetooth | OBDLink® | OBD Solutions.
+
+Turbulent motions cannot shake VR.
+
+In 2015 IEEE Virtual Reality (VR).
+
+Mal de debarquement, motion sickness and the effect of an artiﬁcial horizon.
+
+VR Coaster.
+
+Synchronized VR Rollercoasters.
+
+David Wilﬁnger, Alexander Meschtscherjakov, Martin Murer, Sebastian Osswald, and Manfred Tscheligi.
+
+Wearality shows off a new 180-degree FOV lens for VR.
+
+http://uploadvr.com/wearality-180-degree-fov-lens-vr/ 83.
+
+Augmenting the Field-of-View of Head-Mounted Displays with Sparse Peripheral Displays.
+
