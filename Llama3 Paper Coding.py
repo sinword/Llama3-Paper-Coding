@@ -25,6 +25,7 @@ Please only output sentences directly related to hardware. Do not include any ad
 prompt_v2 = """
 Is there any sentence related to hardware? If yes, please list all the sentences directly without any additional comments or summaries.
 Just print out the original sentence directly, do not reply anything else.
+Don't add any additional comments or summaries.
 """
 
 prompt = prompt_v2
