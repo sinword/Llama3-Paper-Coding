@@ -12,6 +12,14 @@ client = OpenAI(base_url="http://localhost:1234/v1", api_key="lm-studio")
 # Load the PDF file
 pdf_file_path = "./Papers/I Am The Passenger - How Visual Motion Cues Can Influence Sickness For In-Car VR.pdf"
 
+Prepromt = """
+Provide sentences directly related to hardware to assist the model in understanding the task. Here are some examples:
+1. If your input includes any information related to hardware or devices, please list them.
+2. Please ensure that the sentences provided are directly related to hardware, but there is no need to express this association in the output.
+3. The current task is to enable the model to determine whether the sentence is related to hardware. If it is, please respond with "Yes"; if not, respond with "No".
+4. All the sentences provided in this task are excerpts from a research paper.
+"""
+
 prompt_v1 = """
 Is there any sentence related to hardware? If yes, please list all the sentences directly without any additional comments or summaries.
 Here are some examples:
@@ -38,20 +46,18 @@ If they are, respond with "Yes"; if not, respond with "No".
 """
 
 prompt_v5 = """
+The sentence is from paper.
 Please determine whether the following sentences are related to hardware and only hardware.
 If they are, respond with "Yes"; if not, respond with "No".
 Keep in mind that sentences related to hardware may contain information about devices or technical terms.
 """
 
-Prepromt = """
-Provide sentences related to hardware to assist the model in understanding the task. Here are some examples:
-
-1. If your input includes any information related to hardware or devices, please list them.
-2. Please ensure that the sentences provided are directly related to hardware, but there is no need to express this association in the output.
-3. The current task is to enable the model to determine whether the sentence is related to hardware. If it is, please respond with "Yes"; if not, respond with "No".
+prompt_v6 = """
+Please determine whether the following sentences are related to hardware and only hardware. If they are, respond with "Yes"; if not, respond with "No".
+Keep in mind that sentences related to hardware may contain information about devices or technical terms.
 """
 
-prompt = prompt_v5
+prompt = prompt_v6
 
 # Read the PDF file and parse the text
 def extract_text_from_pdf(pdf_file_path):
@@ -68,7 +74,7 @@ def extract_text_from_pdf(pdf_file_path):
         return None
 
 def apply_model_to_sentence(sentence):
-    try:
+    try:    
         completion = client.chat.completions.create(
             model="QuantFactory/Meta-Llama-3-8B-GGUF",
             messages=[
@@ -91,12 +97,17 @@ def main():
     
     sentences = text.split(". ")
 
-    with open("output.txt", "w", encoding = "utf-8") as f:
+    file_name = os.path.basename(pdf_file_path)
+    file_name_without_extension = os.path.splitext(file_name)[0]
+    output_file_name = f"{file_name_without_extension}_output.txt"
+
+    print(output_file_name)
+    with open(output_file_name, "w", encoding = "utf-8") as f:
         for sentence in sentences:
             response = apply_model_to_sentence(sentence)
             if response is not None and response.strip() == "Yes":
                 sentence = sentence.replace("- ", "")
-                f.write(sentence.strip() + ".\n\n")
+                f.write(sentence.strip() + ".\n")
                 print(sentence.strip() + ".")
 
     end_time = time.time()
