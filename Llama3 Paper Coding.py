@@ -1,4 +1,5 @@
 import os
+import openai
 from openai import OpenAI
 import fitz
 import logging
